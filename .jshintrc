@@ -1,0 +1,24 @@
+{
+    "bitwise": "true",
+    "noarg": "true",
+    "esnext": "true",
+    "freeze": "true",
+    "unused": "true",
+    "globalstrict": "true",
+    "maxdepth": 5,
+    "undef": "true",
+    "eqeqeq": "true",
+    "immed": "true",
+    "node": "true",
+    "quotmark": "single",
+    "newcap": "true",
+    "predef": [
+        "console",
+        "module",
+        "require",
+        "it",
+        "before",
+        "after",
+        "describe"
+    ]
+}

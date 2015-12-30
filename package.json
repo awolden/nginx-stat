@@ -1,0 +1,27 @@
+{
+  "name": "nginx-stat",
+  "version": "0.0.1",
+  "description": "Generates NGINX stats and exposes ability to tail log files",
+  "main": "./dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "nginx"
+  ],
+  "author": "Alexander Wolden",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.3.13",
+    "chalk": "^1.1.1",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^6.1.1",
+    "gulp-watch": "^4.3.5"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.3.14",
+    "byline": "^4.2.1",
+    "lodash": "^3.10.1",
+    "tail": "^0.4.0"
+  }
+}
