@@ -2,12 +2,23 @@
 
 import 'babel-polyfill';
 import _ from 'lodash';
-import tail from 'tail';
+import {Tail} from 'tail';
+import fs from 'fs';
+import EventEmitter from 'events';
 
-export class LogWatcher {
+export default class LogWatcher extends EventEmitter {
 
     constructor(opts) {
-      //TODO: Tail File
+        super();
+        if (!fs.lstatSync(opts.logFile).isFile()) {
+            throw new Error(`Unable to find logfile at location: ${opts.logFile}`);
+        }
+
+        this.tail = new Tail(opts.logFile);
+
+        this.tail.on('line', function (line) {
+            this.emit.log('line', line);
+        });
     }
 
 }

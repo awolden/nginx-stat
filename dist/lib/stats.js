@@ -42,7 +42,7 @@ var Stats = (function () {
 
             var details = ['remote_addr', 'remote_user',
             //'request',
-            'status', 'http_referer', 'http_user_agent'];
+            'status', 'http_referer', 'http_user_agent', 'http_x_forwarded_for'];
 
             details.forEach(function (detail) {
                 if (!_this.details[detail]) _this.details[detail] = {};

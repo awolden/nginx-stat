@@ -29,6 +29,7 @@ export default class Parser {
             .replace(/__placeholder__/g, '(.*)');
 
         this.directive = new RegExp(directiveRegex);
+
     }
 
     parse(line) {
@@ -37,12 +38,12 @@ export default class Parser {
 
         let i = 0;
         let match = this.directive.exec(line);
-        if(!match){
-          return;
+        if (!match) {
+            return;
         }
 
-        this.matchMap.forEach((item) =>{
-          newStat[item] = match[++i];
+        this.matchMap.forEach((item) => {
+            newStat[item] = match[++i];
         });
 
         return newStat;

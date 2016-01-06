@@ -30,7 +30,8 @@ export default class Stats {
             //'request',
             'status',
             'http_referer',
-            'http_user_agent'
+            'http_user_agent',
+            'http_x_forwarded_for'
         ];
 
         details.forEach(detail => {

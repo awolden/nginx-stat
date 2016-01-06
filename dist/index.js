@@ -12,6 +12,10 @@ var _logOpener = require('./lib/log-opener');
 
 var _logOpener2 = _interopRequireDefault(_logOpener);
 
+var _logWatcher = require('./lib/log-watcher');
+
+var _logWatcher2 = _interopRequireDefault(_logWatcher);
+
 var _parser = require('./lib/parser');
 
 var _parser2 = _interopRequireDefault(_parser);
@@ -34,7 +38,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var defaultOpts = {
     logFormat: '${{remote_addr}} - ${{remote_user}} [${{time_local}}] "${{request}}" ${{status}} ${{body_bytes_sent}} "${{http_referer}}" "${{http_user_agent}}"',
-    tail: false,
+    emitLines: false,
+    includeHistorical: false,
     logFile: '/var/log/nginx/access.log.1',
     sizeFormat: 'b' //accepts b, m, g
 };
@@ -52,25 +57,38 @@ var NginxStat = (function (_EventEmitter) {
         _this.parser = new _parser2.default(_this.opts);
         _this.stats = new _stats2.default(_this.opts);
 
-        if (_this.opts.tail) {} else {
-            _this.fileReader = new _logOpener2.default(_this.opts);
-        }
-
         _this.startListening();
 
         return _this;
     }
 
     _createClass(NginxStat, [{
+        key: 'update',
+        value: function update(line) {
+            var parsedLine = this.parser.parse(line);
+            this.stats.process(parsedLine);
+            if (this.opts.emitLines) this.emit('line', this.parser.parse(line));
+            this.emit('update', this.stats);
+        }
+    }, {
         key: 'startListening',
         value: function startListening() {
             var _this2 = this;
 
+            this.fileReader = new _logWatcher2.default(this.opts);
+
+            if (this.opts.includeHistorical) {
+                this.historicalLoader = new _logOpener2.default(this.opts);
+                this.historicalLoader.on('line', function (line) {
+                    _this2.update(line);
+                });
+                this.historicalLoader.on('end', function () {
+                    _this2.emit('historyComplete');
+                });
+            }
+
             this.fileReader.on('line', function (line) {
-                _this2.stats.process(_this2.parser.parse(line));
-            });
-            this.fileReader.on('end', function (line) {
-                console.log(_this2.stats.summary, _this2.stats.details);
+                _this2.update(line);
             });
         }
     }]);
